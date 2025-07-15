@@ -26,10 +26,9 @@ app.use("/summary", dashboardRoutes);// Import summary route
 
 async function startServer() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log("✅ MongoDB Connected"))
+    .catch((err) => console.error("❌ MongoDB Error:", err));
     console.log("✅ MongoDB connected");
 
     app.get("/", (req, res) => {
