@@ -13,10 +13,7 @@ const dashboardRoutes = require("./src/Routes/summary");
 const app = express();
 
 // ✅ CORS setup
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000", // allow vercel and local
-  credentials: true
-}));
+app.use(cors());
 
 app.use(express.json()); // Required to parse JSON requests
 
