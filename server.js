@@ -7,29 +7,31 @@ const userRoute = require("./src/Routes/userRoute");
 const productRoute = require("./src/Routes/productsRoute");
 const orderRoute = require("./src/Routes/orderRoute");
 const cartRoute = require("./src/Routes/cartRoute");
-const authRoutes = require("./src/Routes/authRoutes"); // Admin/User login route
+const authRoutes = require("./src/Routes/authRoutes");
 const dashboardRoutes = require("./src/Routes/summary");
 
 const app = express();
 
-// ✅ Middleware
-app.use(cors());
+// ✅ CORS setup
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:3000", // allow vercel and local
+  credentials: true
+}));
+
 app.use(express.json()); // Required to parse JSON requests
 
 // ✅ API Routes
-app.use("/auth", authRoutes); // 🔐 Login for admin/user
-app.use("/users", userRoute); // 👤 User-related routes
-app.use("/products", productRoute); // 🛍️ Product management
-app.use("/orders", orderRoute); // 📦 Orders
-app.use("/cart", cartRoute); // 🛒 Cart
-app.use("/summary", dashboardRoutes);// Import summary route
+app.use("/auth", authRoutes);
+app.use("/users", userRoute);
+app.use("/products", productRoute);
+app.use("/orders", orderRoute);
+app.use("/cart", cartRoute);
+app.use("/summary", dashboardRoutes);
 
 async function startServer() {
   try {
-    mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log("✅ MongoDB Connected"))
-    .catch((err) => console.error("❌ MongoDB Error:", err));
-    console.log("✅ MongoDB connected");
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("✅ MongoDB Connected");
 
     app.get("/", (req, res) => {
       res.send("Hello from railway + Express!");
